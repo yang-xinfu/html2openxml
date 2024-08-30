@@ -2,8 +2,8 @@ package com.denisfesenko.converter;
 
 import com.denisfesenko.core.TagHandler;
 import com.denisfesenko.core.TagHandlerFactory;
-import com.denisfesenko.handler.PlainTextHandler;
-import com.denisfesenko.handler.TableHandler;
+import com.denisfesenko.tag.PlainTextHandler;
+import com.denisfesenko.tag.TableHandler;
 import com.denisfesenko.util.RunUtils;
 import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;

@@ -1,12 +1,7 @@
 package com.denisfesenko.util;
 
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
-import org.docx4j.wml.BooleanDefaultTrue;
-import org.docx4j.wml.ObjectFactory;
-import org.docx4j.wml.P;
-import org.docx4j.wml.PPr;
-import org.docx4j.wml.R;
-import org.docx4j.wml.RPr;
+import org.docx4j.wml.*;
 
 import java.util.List;
 import java.util.function.Function;

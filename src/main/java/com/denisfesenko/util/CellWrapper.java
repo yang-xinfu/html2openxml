@@ -2,12 +2,7 @@ package com.denisfesenko.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.docx4j.wml.CTShd;
-import org.docx4j.wml.STShd;
-import org.docx4j.wml.TblWidth;
-import org.docx4j.wml.Tc;
-import org.docx4j.wml.TcPr;
-import org.docx4j.wml.TcPrInner;
+import org.docx4j.wml.*;
 
 import java.math.BigInteger;
 import java.util.Optional;
@@ -135,7 +130,7 @@ public class CellWrapper {
      */
     private void setTableCellWidth(TcPr tableCellProperties) {
         Optional.ofNullable(width)
-                .filter(w -> !w.isBlank())
+                .filter(w -> !w.isEmpty())
                 .ifPresent(w -> {
                     if (NumberUtils.isCreatable(width)) {
                         TblWidth tableWidth = RunUtils.getObjectFactory().createTblWidth();
@@ -153,7 +148,7 @@ public class CellWrapper {
      */
     private void setTableCellStyle(TcPr tableCellProperties) {
         Optional.ofNullable(style)
-                .filter(s -> !s.isBlank())
+                .filter(s -> !s.isEmpty())
                 .ifPresent(s -> {
                     CTShd shd = RunUtils.getObjectFactory().createCTShd();
                     shd.setVal(STShd.CLEAR);
@@ -170,7 +165,7 @@ public class CellWrapper {
      */
     private void setTableCellMerge(TcPr tableCellProperties) {
         Optional.ofNullable(merge)
-                .filter(m -> !m.isBlank())
+                .filter(m -> !m.isEmpty())
                 .ifPresent(m -> {
                     TcPrInner.VMerge vMerge = new TcPrInner.VMerge();
                     if ("restart".equals(m) || "continue".equals(m)) {

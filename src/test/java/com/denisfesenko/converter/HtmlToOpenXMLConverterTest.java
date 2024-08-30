@@ -1,5 +1,6 @@
 package com.denisfesenko.converter;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -29,6 +30,24 @@ import static org.junit.jupiter.api.Assertions.fail;
 class HtmlToOpenXMLConverterTest {
 
     private final HtmlToOpenXMLConverter converter = new HtmlToOpenXMLConverter();
+
+    @Test
+    void convertHtmlToDocxNormal() throws IOException {
+        // Arrange
+        String html = FileUtils.readFileToString(new File("/Users/fufufu/Documents/yxf-workspace/my-code/html2openxml/src/test/java/com/denisfesenko/converter/1.html"),"utf-8");
+        File outputFile = new File("./output_normal4.docx");
+
+        // Act
+        WordprocessingMLPackage wordMLPackage = null;
+        try {
+            wordMLPackage = converter.convert(html);
+            wordMLPackage.save(outputFile);
+        } catch (Exception e) {
+            fail("Conversion failed with exception: " + e.getMessage());
+        }
+
+
+    }
 
     @Test
     void convertHtmlToDocx_createsValidDocxFileWithCorrectFormatting() {

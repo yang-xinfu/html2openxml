@@ -1,4 +1,4 @@
-package com.denisfesenko.handler;
+package com.denisfesenko.tag;
 
 import com.denisfesenko.converter.HtmlToOpenXMLConverter;
 import com.denisfesenko.core.TagHandler;
@@ -107,7 +107,7 @@ public class TableHandler implements TagHandler {
             cellMatrix[i] = new CellWrapper[tds.size()];
             for (int j = 0; j < tds.size(); j++) {
                 cellMatrix[i][j] = new CellWrapper().setContent(tds.get(j).html()).setStyle(tds.get(j).attr(Constants.STYLE))
-                        .setMerge(tds.get(j).attr("merge")).setColspan(!tds.get(j).attr("colspan").isBlank()
+                        .setMerge(tds.get(j).attr("merge")).setColspan(!tds.get(j).attr("colspan").isEmpty()
                                 ? new BigInteger(tds.get(j).attr("colspan")) : null);
             }
         }
@@ -117,7 +117,7 @@ public class TableHandler implements TagHandler {
     private void processTableCell(CellWrapper tblCol, Tr row, int cellIndex, WordprocessingMLPackage wordMLPackage) {
         Tc column = (Tc) row.getContent().get(cellIndex);
         BigInteger colspan = tblCol.getColspan();
-        if (!tblCol.getStyle().isBlank() || !tblCol.getMerge().isBlank() || colspan != null) {
+        if (!tblCol.getStyle().isEmpty() || !tblCol.getMerge().isEmpty() || colspan != null) {
             tblCol.setCellParams(column);
             if (colspan != null) {
                 int elementsToRemove = colspan.intValue() - 1;

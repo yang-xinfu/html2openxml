@@ -27,5 +27,5 @@ public interface TagHandler {
      *
      * @return True if the tag is repeatable; otherwise, false.
      */
-    boolean isRepeatable();
+    default boolean isRepeatable() {return false;};
 }

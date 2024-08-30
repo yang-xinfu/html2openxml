@@ -1,6 +1,6 @@
 package com.denisfesenko.converter.handler;
 
-import com.denisfesenko.handler.PlainTextHandler;
+import com.denisfesenko.tag.PlainTextHandler;
 import com.denisfesenko.util.RunUtils;
 import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;

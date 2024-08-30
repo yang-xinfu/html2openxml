@@ -3,20 +3,17 @@ package com.denisfesenko.util;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.docx4j.sharedtypes.STOnOff;
-import org.docx4j.wml.CTBorder;
-import org.docx4j.wml.CTTblLook;
-import org.docx4j.wml.ObjectFactory;
-import org.docx4j.wml.STBorder;
-import org.docx4j.wml.Tbl;
-import org.docx4j.wml.TblBorders;
-import org.docx4j.wml.TblGridCol;
-import org.docx4j.wml.TblPr;
+import org.docx4j.wml.*;
+import org.jsoup.nodes.Attribute;
+import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Node;
 
 import java.math.BigInteger;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.denisfesenko.util.Constants.*;
 
 /**
  * The ConverterUtils class provides utility methods for converting and manipulating HTML and docx4j objects.
@@ -99,7 +96,7 @@ public class ConverterUtils {
             } else {
                 tblGridCol.setW(tbl.getTblPr().getTblW().getW()
                         .divide(BigInteger.valueOf(firstRow.length))
-                        .multiply(BigInteger.TWO));
+                        .multiply(BigInteger.valueOf(2)));
             }
             tbl.getTblGrid().getGridCol().set(i, tblGridCol);
         }
@@ -156,7 +153,7 @@ public class ConverterUtils {
      * @param px The pixel value to be converted.
      * @return The equivalent OpenXML DXA value as a BigInteger.
      */
-    public static BigInteger pxToDxa(int px) {
+    public static BigInteger pxToDxa(Double px) {
         double inches = px / 96.0;
         return BigInteger.valueOf(Math.round(inches * 1440));
     }
@@ -167,7 +164,7 @@ public class ConverterUtils {
      * @param px The pixel value to be converted.
      * @return The equivalent OpenXML half-points value as a BigInteger.
      */
-    public static BigInteger pxToHalfPoints(int px) {
+    public static BigInteger pxToHalfPoints(double px) {
         int dpi = 96; // Standard display DPI
         int pointsPerInch = 72;
         return BigInteger.valueOf(Math.round(((double) px / dpi) * pointsPerInch * 2));
@@ -183,9 +180,158 @@ public class ConverterUtils {
         return StringUtils.substringBetween(style, Constants.WIDTH + ": ", "%;");
     }
 
-    /**
-     * Private constructor to prevent instantiation.
-     */
-    private ConverterUtils() {
+    public static Map<String,String> getNodeStyle(Node node) {
+
+        String style = StringUtils.isNotBlank(node.attr(STYLE)) ? node.attr(STYLE) : null;
+
+        Attributes attributes = node.attributes();
+
+        Map<String, String> styleMap = styleToMap(style);
+
+        HashMap<String, String> allAttrMap = new HashMap<>(styleMap);
+
+        for (Attribute attribute : attributes) {
+            allAttrMap.put(attribute.getKey(),attribute.getValue());
+        }
+
+        return allAttrMap;
+    }
+
+    public static Map<String, String> styleToMap(String style) {
+
+        Map<String, String> styleMap = new HashMap<>();
+        if (StringUtils.isBlank(style)) {
+            return styleMap;
+        }
+
+        Arrays.stream(style.split(SEMICOLON))
+                .filter(StringUtils::isNotBlank)
+                .filter(s -> s.contains(COLON))
+                .forEach(s -> {
+                    String[] split = s.split(COLON);
+                    styleMap.put(split[0].trim(), split[1].trim());
+                });
+
+        return styleMap;
+    }
+
+
+    public static Double getPxNum(String attrValue) {
+
+        if (StringUtils.isBlank(attrValue)) {
+            return null;
+        }
+
+        if (attrValue.contains("em")) {
+            Double pxNum = getNumWithoutUnit(attrValue,"em");
+            if (Objects.nonNull(pxNum)) {
+                return 14 * pxNum;
+            }
+        }else if (attrValue.contains("px")){
+            return getNumWithoutUnit(attrValue,"px");
+        }else if (attrValue.contains("ex")) {
+            Double pxNum = getNumWithoutUnit(attrValue,"ex");
+            if (Objects.nonNull(pxNum)) {
+                return 7 * pxNum;
+            }
+        }
+
+        return null;
+    }
+
+
+
+    public static Double getEmNum(String attrValue) {
+
+        Double pxNum = getNumWithoutUnit(attrValue,"em");
+
+        if (Objects.nonNull(pxNum)) {
+            return 14 * pxNum;
+        }
+
+        return null;
+    }
+
+    public static Double getExNum(String attrValue,int baseXPx) {
+
+        Double pxNum = getNumWithoutUnit(attrValue,"em");
+
+        if (Objects.nonNull(pxNum)) {
+            return baseXPx * pxNum;
+        }
+
+        return null;
+    }
+
+
+    public static Double getNumWithoutUnit(String attrValue,String unit) {
+
+        if (StringUtils.isBlank(attrValue)) {
+            return null;
+        }
+        String pxNumStr = attrValue.replaceAll(unit,"").trim();
+
+        boolean numeric = NumberUtils.isCreatable(pxNumStr);
+        if (!numeric) {
+            return null;
+        }
+
+        return Double.valueOf(pxNumStr);
+
+    }
+
+    public static ScaleResult resizeImages(Double orgWidthPx,Double orgHeightPx,Double destWidthPx,Double destHeightPx) {
+
+        ScaleResult scaleResult = new ScaleResult();
+        if (Objects.nonNull(destHeightPx) && Objects.nonNull(destWidthPx)) {
+            scaleResult.setHeightPx(destHeightPx);
+            scaleResult.setWidthPx(destWidthPx);
+            return scaleResult;
+        }
+
+        if (Objects.isNull(destHeightPx) && Objects.isNull(destWidthPx)) {
+            scaleResult.setHeightPx(orgHeightPx);
+            scaleResult.setWidthPx(orgWidthPx);
+            return scaleResult;
+        }
+
+        double newWidth;
+        double newHeight;
+        if (Objects.nonNull(destHeightPx)) {
+            // 按高度缩放
+            newHeight = destHeightPx;
+            newWidth = (newHeight / orgHeightPx) * orgWidthPx;
+        } else {
+            // 按宽度缩放
+            newWidth = destWidthPx;
+            newHeight = (newWidth / orgWidthPx) * orgHeightPx;
+        }
+
+        scaleResult.setWidthPx(newWidth);
+        scaleResult.setHeightPx(newHeight);
+
+        return scaleResult;
+    }
+
+    public static class ScaleResult{
+
+        private Double widthPx;
+        private Double heightPx;
+
+        public Double getWidthPx() {
+            return widthPx;
+        }
+
+        public void setWidthPx(Double widthPx) {
+            this.widthPx = widthPx;
+        }
+
+        public Double getHeightPx() {
+            return heightPx;
+        }
+
+        public void setHeightPx(Double heightPx) {
+            this.heightPx = heightPx;
+        }
     }
 }

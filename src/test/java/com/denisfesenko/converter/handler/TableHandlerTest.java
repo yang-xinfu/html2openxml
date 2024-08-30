@@ -1,7 +1,7 @@
 package com.denisfesenko.converter.handler;
 
 import com.denisfesenko.converter.HtmlToOpenXMLConverter;
-import com.denisfesenko.handler.TableHandler;
+import com.denisfesenko.tag.TableHandler;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.wml.STBorder;
 import org.docx4j.wml.Tbl;

@@ -1,4 +1,4 @@
-package com.denisfesenko.handler;
+package com.denisfesenko.tag;
 
 import com.denisfesenko.core.TagHandler;
 import com.denisfesenko.util.RunUtils;

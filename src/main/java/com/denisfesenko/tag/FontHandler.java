@@ -1,4 +1,4 @@
-package com.denisfesenko.handler;
+package com.denisfesenko.tag;
 
 import com.denisfesenko.core.TagHandler;
 import com.denisfesenko.util.Constants;
@@ -12,6 +12,8 @@ import org.docx4j.wml.HpsMeasure;
 import org.docx4j.wml.ObjectFactory;
 import org.docx4j.wml.RPr;
 import org.jsoup.nodes.Node;
+
+import java.util.Objects;
 
 /**
  * Handles the font-related properties of an HTML node and updates the corresponding
@@ -32,7 +34,7 @@ public class FontHandler implements TagHandler {
         ObjectFactory objectFactory = RunUtils.getObjectFactory();
         RPr rPr = RunUtils.getCurrentRPr(wordMLPackage);
 
-        String nodeColor = fontNode.attr("color");
+        String nodeColor = fontNode.attr(Constants.ATTR_KEY_COLOR);
         if (StringUtils.isNotBlank(nodeColor)) {
             String fontColor = ConverterUtils.isHexColor(nodeColor)
                     ? nodeColor : ConverterUtils.rgbToHex(nodeColor, Constants.HEX_BLACK_COLOR);
@@ -41,11 +43,11 @@ public class FontHandler implements TagHandler {
             rPr.setColor(color);
         }
 
-        String nodeSize = StringUtils.substringBefore(fontNode.attr("size"), "px");
-        if (NumberUtils.isCreatable(nodeSize)) {
-            int fontSize = Integer.parseInt(nodeSize);
+        String size = fontNode.attr("size");
+        Double pxNum = ConverterUtils.getPxNum(size);
+        if (Objects.nonNull(pxNum)) {
             HpsMeasure hpsMeasure = objectFactory.createHpsMeasure();
-            hpsMeasure.setVal(ConverterUtils.pxToHalfPoints(fontSize));
+            hpsMeasure.setVal(ConverterUtils.pxToHalfPoints(pxNum));
             rPr.setSz(hpsMeasure);
             rPr.setSzCs(hpsMeasure);
         }

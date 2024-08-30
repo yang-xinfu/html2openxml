@@ -1,4 +1,4 @@
-package com.denisfesenko.handler;
+package com.denisfesenko.tag;
 
 import com.denisfesenko.core.TagHandler;
 import com.denisfesenko.util.RunUtils;
@@ -28,7 +28,6 @@ public class UnderlineHandler implements TagHandler {
         u.setVal(UnderlineEnumeration.SINGLE);
         rPr.setU(u);
     }
-
     /**
      * This method returns whether the tag handler can be applied to multiple tags.
      *
