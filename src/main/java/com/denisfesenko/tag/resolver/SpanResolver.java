@@ -1,6 +1,6 @@
-package com.denisfesenko.tag;
+package com.denisfesenko.tag.resolver;
 
-import com.denisfesenko.core.TagHandler;
+import com.denisfesenko.tag.resolver.core.TagResolver;
 import com.denisfesenko.util.Constants;
 import com.denisfesenko.util.ConverterUtils;
 import com.denisfesenko.util.RunUtils;
@@ -12,21 +12,10 @@ import org.jsoup.nodes.Node;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * The SpanHandler class is an implementation of the TagHandler interface. It is responsible for handling
- * span nodes in an HTML document, specifically dealing with background colors and adding them as highlights
- * in a WordprocessingMLPackage.
- */
-public class SpanHandler implements TagHandler {
+public class SpanResolver implements TagResolver {
 
-    /**
-     * Handles a span node by adding its background color as a highlight in the WordprocessingMLPackage.
-     *
-     * @param node          the span node to be handled
-     * @param wordMLPackage the WordprocessingMLPackage to which the highlight will be added
-     */
     @Override
-    public void handleTag(Node node, WordprocessingMLPackage wordMLPackage) {
+    public void convert(Node node, WordprocessingMLPackage wordMLPackage) {
         Node spanNode = ConverterUtils.findParentNode(node, "span");
         Map<String, String> nodeStyle = ConverterUtils.getNodeStyle(spanNode);
         ObjectFactory objectFactory = RunUtils.getObjectFactory();
@@ -85,11 +74,6 @@ public class SpanHandler implements TagHandler {
 
     }
 
-    /**
-     * Determines if the tag handler is repeatable. In this implementation, it is repeatable.
-     *
-     * @return true, as the SpanHandler is repeatable
-     */
     @Override
     public boolean isRepeatable() {
         return true;

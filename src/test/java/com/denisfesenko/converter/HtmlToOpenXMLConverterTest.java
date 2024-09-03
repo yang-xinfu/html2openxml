@@ -4,15 +4,10 @@ import org.apache.commons.io.FileUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
-import org.docx4j.wml.BooleanDefaultTrue;
-import org.docx4j.wml.P;
-import org.docx4j.wml.R;
-import org.docx4j.wml.RPr;
-import org.docx4j.wml.Text;
-import org.docx4j.wml.U;
-import org.docx4j.wml.UnderlineEnumeration;
+import org.docx4j.wml.*;
 import org.junit.jupiter.api.Test;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STHighlightColor;
 
@@ -21,30 +16,23 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 class HtmlToOpenXMLConverterTest {
 
     private final HtmlToOpenXMLConverter converter = new HtmlToOpenXMLConverter();
 
     @Test
-    void convertHtmlToDocxNormal() throws IOException {
+    void convertHtmlToDocxNormal() throws IOException, Docx4JException {
         // Arrange
-        String html = FileUtils.readFileToString(new File("/Users/fufufu/Documents/yxf-workspace/my-code/html2openxml/src/test/java/com/denisfesenko/converter/1.html"),"utf-8");
-        File outputFile = new File("./output_normal4.docx");
+        String html = FileUtils.readFileToString(new File("/Users/fufufu/Documents/yxf-workspace/my-code/html2openxml/src/test/java/com/denisfesenko/converter/3.html"), "utf-8");
+        File outputFile = new File("./output_normal12.docx");
 
         // Act
         WordprocessingMLPackage wordMLPackage = null;
-        try {
-            wordMLPackage = converter.convert(html);
-            wordMLPackage.save(outputFile);
-        } catch (Exception e) {
-            fail("Conversion failed with exception: " + e.getMessage());
-        }
+
+        wordMLPackage = converter.convert(html);
+        wordMLPackage.save(outputFile);
 
 
     }

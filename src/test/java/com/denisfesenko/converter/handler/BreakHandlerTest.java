@@ -1,6 +1,6 @@
 package com.denisfesenko.converter.handler;
 
-import com.denisfesenko.tag.BreakHandler;
+import com.denisfesenko.tag.resolver.BreakResolver;
 import com.denisfesenko.util.RunUtils;
 import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -17,12 +17,12 @@ class BreakHandlerTest {
     @Test
     void handleTag_appliesBreakFormatting() throws InvalidFormatException {
         // Arrange
-        BreakHandler breakHandler = new BreakHandler();
+        BreakResolver breakHandler = new BreakResolver();
         Node breakNode = Jsoup.parse("<br/>").body().child(0);
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
 
         // Act
-        breakHandler.handleTag(breakNode, wordMLPackage);
+        breakHandler.convert(breakNode, wordMLPackage);
 
         // Assert
         R run = RunUtils.getCurrentRun(wordMLPackage);

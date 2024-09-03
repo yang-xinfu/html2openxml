@@ -1,11 +1,10 @@
-package com.denisfesenko.tag;
+package com.denisfesenko.tag.resolver;
 
-import com.denisfesenko.core.TagHandler;
+import com.denisfesenko.tag.resolver.core.TagResolver;
 import com.denisfesenko.util.Constants;
 import com.denisfesenko.util.ConverterUtils;
 import com.denisfesenko.util.RunUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.wml.Color;
 import org.docx4j.wml.HpsMeasure;
@@ -15,21 +14,10 @@ import org.jsoup.nodes.Node;
 
 import java.util.Objects;
 
-/**
- * Handles the font-related properties of an HTML node and updates the corresponding
- * properties in a WordprocessingMLPackage instance.
- */
-public class FontHandler implements TagHandler {
+public class FontResolver implements TagResolver {
 
-    /**
-     * Handles the font-related properties of the given HTML node and updates the
-     * corresponding properties in the provided WordprocessingMLPackage instance.
-     *
-     * @param node          The HTML node to handle.
-     * @param wordMLPackage The WordprocessingMLPackage instance to update.
-     */
     @Override
-    public void handleTag(Node node, WordprocessingMLPackage wordMLPackage) {
+    public void convert(Node node, WordprocessingMLPackage wordMLPackage) {
         Node fontNode = ConverterUtils.findParentNode(node, "font");
         ObjectFactory objectFactory = RunUtils.getObjectFactory();
         RPr rPr = RunUtils.getCurrentRPr(wordMLPackage);
@@ -53,11 +41,6 @@ public class FontHandler implements TagHandler {
         }
     }
 
-    /**
-     * Indicates whether the FontHandler can be applied multiple times to the same node.
-     *
-     * @return true if the FontHandler can be applied multiple times; false otherwise.
-     */
     @Override
     public boolean isRepeatable() {
         return true;

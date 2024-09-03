@@ -1,7 +1,7 @@
 package com.denisfesenko.converter.handler;
 
 import com.denisfesenko.converter.HtmlToOpenXMLConverter;
-import com.denisfesenko.tag.TableHandler;
+import com.denisfesenko.tag.resolver.TableResolver;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.wml.STBorder;
 import org.docx4j.wml.Tbl;
@@ -21,12 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TableHandlerTest {
 
-    private TableHandler tableHandler;
+    private TableResolver tableHandler;
     private WordprocessingMLPackage wordMLPackage;
 
     @BeforeEach
     void setUp() throws Exception {
-        tableHandler = new TableHandler();
+        tableHandler = new TableResolver();
         HtmlToOpenXMLConverter converter = new HtmlToOpenXMLConverter();
         wordMLPackage = WordprocessingMLPackage.createPackage();
         tableHandler.addConverter(converter);
@@ -37,7 +37,7 @@ class TableHandlerTest {
         String html = "<html><body><table><tr><td>Cell 1</td><td>Cell 2</td></tr><tr><td>Cell 3</td><td>Cell 4</td></tr>" +
                 "</table></body></html>";
         Document document = Jsoup.parse(html);
-        tableHandler.handleTag(document.body().child(0), wordMLPackage);
+        tableHandler.convert(document.body().child(0), wordMLPackage);
 
         // Check that the table was added to the WordprocessingMLPackage
         assertEquals(1, wordMLPackage.getMainDocumentPart().getContent().size());
@@ -49,7 +49,7 @@ class TableHandlerTest {
         String html = "<html><body><table><tr><td colspan=\"2\">Cell 1</td></tr><tr><td>Cell 2</td><td>Cell 3</td></tr>" +
                 "</table></body></html>";
         Document document = Jsoup.parse(html);
-        tableHandler.handleTag(document.body().child(0), wordMLPackage);
+        tableHandler.convert(document.body().child(0), wordMLPackage);
 
         // Check that the table was added to the WordprocessingMLPackage
         Tbl table = (Tbl) wordMLPackage.getMainDocumentPart().getContent().get(0);
@@ -63,7 +63,7 @@ class TableHandlerTest {
     void testTableWithStyle() throws Exception {
         String html = "<html><body><table><tr><td style=\"background-color: #FF0000;\">Cell 1</td></tr></table></body></html>";
         Document document = Jsoup.parse(html);
-        tableHandler.handleTag(document.body().child(0), wordMLPackage);
+        tableHandler.convert(document.body().child(0), wordMLPackage);
 
         // Check that the table was added to the WordprocessingMLPackage
         Tbl table = (Tbl) wordMLPackage.getMainDocumentPart().getContent().get(0);
@@ -77,7 +77,7 @@ class TableHandlerTest {
     void testTableWithTdWidth() throws Exception {
         String html = "<html><body><table><tr><td style=\"width: 100%;\">Cell 1</td></tr></table></body></html>";
         Document document = Jsoup.parse(html);
-        tableHandler.handleTag(document.body().child(0), wordMLPackage);
+        tableHandler.convert(document.body().child(0), wordMLPackage);
 
         // Check that the table was added to the WordprocessingMLPackage
         Tbl table = (Tbl) wordMLPackage.getMainDocumentPart().getContent().get(0);
@@ -91,7 +91,7 @@ class TableHandlerTest {
     void testTableWithWidth() throws Exception {
         String html = "<html><body><table style=\"width: 100%;\"><tr><td>Cell 1</td></tr></table></body></html>";
         Document document = Jsoup.parse(html);
-        tableHandler.handleTag(document.body().child(0), wordMLPackage);
+        tableHandler.convert(document.body().child(0), wordMLPackage);
 
         Tbl table = (Tbl) wordMLPackage.getMainDocumentPart().getContent().get(0);
         assertNotNull(table.getTblPr());
@@ -104,7 +104,7 @@ class TableHandlerTest {
         String html = "<html><body><table><tr><td merge=\"restart\">Cell 1</td><td>Cell 2</td></tr><tr>" +
                 "<td merge=\"continue\">Cell 3</td><td>Cell 4</td></tr></table></body></html>";
         Document document = Jsoup.parse(html);
-        tableHandler.handleTag(document.body().child(0), wordMLPackage);
+        tableHandler.convert(document.body().child(0), wordMLPackage);
 
         // Check if the table was added to the WordprocessingMLPackage
         assertEquals(1, wordMLPackage.getMainDocumentPart().getContent().size());
@@ -129,7 +129,7 @@ class TableHandlerTest {
                 "<td style=\"background-color: #00ff00;\">Cell 2</td></tr><tr><td style=\"background-color: #0000ff;\">Cell 3</td>" +
                 "<td>Cell 4</td></tr></table></body></html>";
         Document document = Jsoup.parse(html);
-        tableHandler.handleTag(document.body().child(0), wordMLPackage);
+        tableHandler.convert(document.body().child(0), wordMLPackage);
 
         // Check if the table was added to the WordprocessingMLPackage
         assertEquals(1, wordMLPackage.getMainDocumentPart().getContent().size());
@@ -158,7 +158,7 @@ class TableHandlerTest {
                 "<td style=\"background-color: #00ff00;\">Cell 2</td></tr><tr>" +
                 "<td style=\"background-color: #0000ff;\" merge=\"continue\">Cell 3</td><td>Cell 4</td></tr></table></body></html>";
         Document document = Jsoup.parse(html);
-        tableHandler.handleTag(document.body().child(0), wordMLPackage);
+        tableHandler.convert(document.body().child(0), wordMLPackage);
 
         // Check if the table was added to the WordprocessingMLPackage
         assertEquals(1, wordMLPackage.getMainDocumentPart().getContent().size());
@@ -195,7 +195,7 @@ class TableHandlerTest {
         String html = "<html><body><table style=\"border: none;\"><tr><td>Cell 1</td><td>Cell 2</td></tr><tr>" +
                 "<td>Cell 3</td><td>Cell 4</td></tr></table></body></html>";
         Document document = Jsoup.parse(html);
-        tableHandler.handleTag(document.body().child(0), wordMLPackage);
+        tableHandler.convert(document.body().child(0), wordMLPackage);
 
         // Check if the table was added to the WordprocessingMLPackage
         assertEquals(1, wordMLPackage.getMainDocumentPart().getContent().size());

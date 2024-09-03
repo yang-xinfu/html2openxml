@@ -44,6 +44,8 @@ public interface Constants {
     String ATTR_KEY_TEXT_EMPHASIS = "text-emphasis";
     String ATTR_KEY_SRC = "src";
 
+    String ATTR_KEY_VERTICAL_ALIGN = "vertical-align";
+
 
 
     interface TextDecoration{

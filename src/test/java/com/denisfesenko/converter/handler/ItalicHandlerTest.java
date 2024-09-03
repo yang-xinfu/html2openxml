@@ -1,6 +1,6 @@
 package com.denisfesenko.converter.handler;
 
-import com.denisfesenko.tag.ItalicHandler;
+import com.denisfesenko.tag.resolver.ItalicResolver;
 import com.denisfesenko.util.RunUtils;
 import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -16,12 +16,12 @@ class ItalicHandlerTest {
     @Test
     void handleTag_appliesItalicFormatting() throws InvalidFormatException {
         // Arrange
-        ItalicHandler italicHandler = new ItalicHandler();
+        ItalicResolver italicHandler = new ItalicResolver();
         Node italicNode = Jsoup.parse("<i>Italic text</i>").body().child(0);
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
 
         // Act
-        italicHandler.handleTag(italicNode, wordMLPackage);
+        italicHandler.convert(italicNode, wordMLPackage);
 
         // Assert
         RPr rPr = RunUtils.getCurrentRPr(wordMLPackage);

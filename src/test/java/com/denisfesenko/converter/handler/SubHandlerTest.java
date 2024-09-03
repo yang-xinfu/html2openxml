@@ -1,6 +1,6 @@
 package com.denisfesenko.converter.handler;
 
-import com.denisfesenko.tag.SubHandler;
+import com.denisfesenko.tag.resolver.SubResolver;
 import com.denisfesenko.util.RunUtils;
 import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -18,8 +18,8 @@ class SubHandlerTest {
     void handleTag() throws InvalidFormatException {
         Element subElement = new Element(Tag.valueOf("sub"), "");
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
-        SubHandler subHandler = new SubHandler();
-        subHandler.handleTag(subElement, wordMLPackage);
+        SubResolver subHandler = new SubResolver();
+        subHandler.convert(subElement, wordMLPackage);
         R currentRun = RunUtils.getCurrentRun(wordMLPackage);
         STVerticalAlignRun vertAlignVal = currentRun.getRPr().getVertAlign().getVal();
         assertEquals(STVerticalAlignRun.SUBSCRIPT, vertAlignVal);

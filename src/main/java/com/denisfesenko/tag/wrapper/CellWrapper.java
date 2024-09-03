@@ -1,5 +1,7 @@
-package com.denisfesenko.util;
+package com.denisfesenko.tag.wrapper;
 
+import com.denisfesenko.util.ConverterUtils;
+import com.denisfesenko.util.RunUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.docx4j.wml.*;

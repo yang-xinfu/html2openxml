@@ -1,5 +1,6 @@
 package com.denisfesenko.util;
 
+import com.denisfesenko.tag.wrapper.CellWrapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.docx4j.sharedtypes.STOnOff;
@@ -209,7 +210,9 @@ public class ConverterUtils {
                 .filter(s -> s.contains(COLON))
                 .forEach(s -> {
                     String[] split = s.split(COLON);
-                    styleMap.put(split[0].trim(), split[1].trim());
+                    if (split.length >= 1) {
+                        styleMap.put(split[0].trim(), split[1].trim());
+                    }
                 });
 
         return styleMap;
@@ -232,7 +235,7 @@ public class ConverterUtils {
         }else if (attrValue.contains("ex")) {
             Double pxNum = getNumWithoutUnit(attrValue,"ex");
             if (Objects.nonNull(pxNum)) {
-                return 7 * pxNum;
+                return 6 * pxNum;
             }
         }
 

@@ -1,11 +1,9 @@
-package com.denisfesenko.tag;
+package com.denisfesenko.tag.resolver;
 
-import com.denisfesenko.core.TagHandler;
+import com.denisfesenko.tag.resolver.core.TagResolver;
 import com.denisfesenko.util.ConverterUtils;
-import com.denisfesenko.util.JcEnumMapper;
+import com.denisfesenko.tag.wrapper.JcEnumMapper;
 import com.denisfesenko.util.RunUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.docx4j.UnitsOfMeasurement;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.wml.Jc;
 import org.docx4j.wml.ObjectFactory;
@@ -19,19 +17,11 @@ import java.util.Objects;
 import static com.denisfesenko.util.Constants.ATTR_KEY_ALIGN;
 import static com.denisfesenko.util.Constants.ATTR_KEY_TEXT_INDENT;
 
-/**
- * This class handles the conversion of HTML paragraphs to WordprocessingMLPackage format.
- */
-public class ParagraphHandler implements TagHandler {
 
-    /**
-     * Converts the paragraph node to a WordprocessingMLPackage instance.
-     *
-     * @param node          The paragraph node to be converted.
-     * @param wordMLPackage The WordprocessingMLPackage instance to which the converted paragraph will be added.
-     */
+public class ParagraphResolver implements TagResolver {
+
     @Override
-    public void handleTag(Node node, WordprocessingMLPackage wordMLPackage) {
+    public void convert(Node node, WordprocessingMLPackage wordMLPackage) {
         Map<String, String> nodeStyle = ConverterUtils.getNodeStyle(node);
 
 
@@ -57,13 +47,4 @@ public class ParagraphHandler implements TagHandler {
         RunUtils.createParagraph(wordMLPackage, pPr);
     }
 
-    /**
-     * Returns whether the tag handler is repeatable.
-     *
-     * @return false, because the ParagraphHandler is not repeatable.
-     */
-    @Override
-    public boolean isRepeatable() {
-        return false;
-    }
 }

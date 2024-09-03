@@ -1,6 +1,6 @@
-package com.denisfesenko.tag;
+package com.denisfesenko.tag.resolver;
 
-import com.denisfesenko.core.TagHandler;
+import com.denisfesenko.tag.resolver.core.TagResolver;
 import com.denisfesenko.util.RunUtils;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.wml.BooleanDefaultTrue;
@@ -13,9 +13,9 @@ import org.jsoup.nodes.Node;
  * @author YangXinFu
  * @date 2024/8/29 14:25
  */
-public class SHandler implements TagHandler {
+public class SResolver implements TagResolver {
     @Override
-    public void handleTag(Node node, WordprocessingMLPackage wordMLPackage) {
+    public void convert(Node node, WordprocessingMLPackage wordMLPackage) {
         RPr currentRPr = RunUtils.getCurrentRPr(wordMLPackage);
         BooleanDefaultTrue strike = new BooleanDefaultTrue();
         strike.setVal(true);

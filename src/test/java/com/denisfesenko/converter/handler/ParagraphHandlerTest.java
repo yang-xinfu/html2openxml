@@ -1,6 +1,6 @@
 package com.denisfesenko.converter.handler;
 
-import com.denisfesenko.tag.ParagraphHandler;
+import com.denisfesenko.tag.resolver.ParagraphResolver;
 import com.denisfesenko.util.RunUtils;
 import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -18,12 +18,12 @@ class ParagraphHandlerTest {
     @Test
     void handleTag_appliesParagraphFormatting() throws InvalidFormatException {
         // Arrange
-        ParagraphHandler paragraphHandler = new ParagraphHandler();
+        ParagraphResolver paragraphHandler = new ParagraphResolver();
         Node pNode = Jsoup.parse("<p align=\"left\" style=\"text-indent: 50px;\">Paragraph</p>").body().child(0);
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
 
         // Act
-        paragraphHandler.handleTag(pNode, wordMLPackage);
+        paragraphHandler.convert(pNode, wordMLPackage);
 
         // Assert
         P p = RunUtils.getCurrentParagraph(wordMLPackage);

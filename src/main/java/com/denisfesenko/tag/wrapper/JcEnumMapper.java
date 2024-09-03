@@ -1,4 +1,4 @@
-package com.denisfesenko.util;
+package com.denisfesenko.tag.wrapper;
 
 import org.docx4j.wml.JcEnumeration;
 

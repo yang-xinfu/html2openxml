@@ -1,6 +1,6 @@
 package com.denisfesenko.converter.handler;
 
-import com.denisfesenko.tag.BoldHandler;
+import com.denisfesenko.tag.resolver.BoldResolver;
 import com.denisfesenko.util.RunUtils;
 import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -16,12 +16,12 @@ class BoldHandlerTest {
     @Test
     void handleTag_appliesBoldFormatting() throws InvalidFormatException {
         // Arrange
-        BoldHandler boldHandler = new BoldHandler();
+        BoldResolver boldHandler = new BoldResolver();
         Node boldNode = Jsoup.parse("<b>Bold text</b>").body().child(0);
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
 
         // Act
-        boldHandler.handleTag(boldNode, wordMLPackage);
+        boldHandler.convert(boldNode, wordMLPackage);
 
         // Assert
         RPr rPr = RunUtils.getCurrentRPr(wordMLPackage);

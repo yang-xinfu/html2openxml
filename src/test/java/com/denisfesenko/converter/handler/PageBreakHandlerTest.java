@@ -1,6 +1,6 @@
 package com.denisfesenko.converter.handler;
 
-import com.denisfesenko.tag.PageBreakHandler;
+import com.denisfesenko.tag.resolver.PageBreakResolver;
 import com.denisfesenko.util.RunUtils;
 import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -19,12 +19,12 @@ class PageBreakHandlerTest {
     @Test
     void handleTag_appliesPageBreakFormatting() throws InvalidFormatException {
         // Arrange
-        PageBreakHandler pageBreakHandler = new PageBreakHandler();
+        PageBreakResolver pageBreakHandler = new PageBreakResolver();
         Node breakNode = Jsoup.parse("<pb/>").body().child(0);
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
 
         // Act
-        pageBreakHandler.handleTag(breakNode, wordMLPackage);
+        pageBreakHandler.convert(breakNode, wordMLPackage);
 
         // Assert
         R run = RunUtils.getCurrentRun(wordMLPackage);

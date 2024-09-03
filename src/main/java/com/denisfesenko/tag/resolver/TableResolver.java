@@ -1,8 +1,8 @@
-package com.denisfesenko.tag;
+package com.denisfesenko.tag.resolver;
 
 import com.denisfesenko.converter.HtmlToOpenXMLConverter;
-import com.denisfesenko.core.TagHandler;
-import com.denisfesenko.util.CellWrapper;
+import com.denisfesenko.tag.resolver.core.TagResolver;
+import com.denisfesenko.tag.wrapper.CellWrapper;
 import com.denisfesenko.util.Constants;
 import com.denisfesenko.util.ConverterUtils;
 import com.denisfesenko.util.RunUtils;
@@ -22,23 +22,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * This class handles the conversion of HTML tables to WordprocessingMLPackage format.
- */
-public class TableHandler implements TagHandler {
+public class TableResolver implements TagResolver {
 
     private HtmlToOpenXMLConverter converter;
 
-    /**
-     * This method is called to process the input node and convert it to the corresponding
-     * WordprocessingMLPackage format.
-     *
-     * @param node          The input HTML node to be processed.
-     * @param wordMLPackage The WordprocessingMLPackage instance where the converted content
-     *                      will be added.
-     */
     @Override
-    public void handleTag(Node node, WordprocessingMLPackage wordMLPackage) {
+    public void convert(Node node, WordprocessingMLPackage wordMLPackage) {
         Element rootNode = (Element) node;
         Element docTable = rootNode.selectFirst("table");
         if (docTable != null) {
@@ -53,23 +42,7 @@ public class TableHandler implements TagHandler {
         }
     }
 
-    /**
-     * This method returns whether the tag handler can be applied to multiple tags.
-     *
-     * @return false, as the TableHandler should not be applied to multiple tags.
-     */
-    @Override
-    public boolean isRepeatable() {
-        return false;
-    }
-
-    /**
-     * Adds the HtmlToOpenXMLConverter instance to this TableHandler.
-     *
-     * @param converter The HtmlToOpenXMLConverter instance.
-     * @return The TableHandler instance.
-     */
-    public TableHandler addConverter(HtmlToOpenXMLConverter converter) {
+    public TableResolver addConverter(HtmlToOpenXMLConverter converter) {
         this.converter = converter;
         return this;
     }

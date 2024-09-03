@@ -1,6 +1,6 @@
 package com.denisfesenko.converter.handler;
 
-import com.denisfesenko.tag.SupHandler;
+import com.denisfesenko.tag.resolver.SupResolver;
 import com.denisfesenko.util.RunUtils;
 import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -18,8 +18,8 @@ class SupHandlerTest {
     void handleTag() throws InvalidFormatException {
         Element supElement = new Element(Tag.valueOf("sup"), "");
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
-        SupHandler supHandler = new SupHandler();
-        supHandler.handleTag(supElement, wordMLPackage);
+        SupResolver supHandler = new SupResolver();
+        supHandler.convert(supElement, wordMLPackage);
         R currentRun = RunUtils.getCurrentRun(wordMLPackage);
         STVerticalAlignRun vertAlignVal = currentRun.getRPr().getVertAlign().getVal();
         assertEquals(STVerticalAlignRun.SUPERSCRIPT, vertAlignVal);
